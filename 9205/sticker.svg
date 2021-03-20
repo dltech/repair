@@ -86,9 +86,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8284271"
-     inkscape:cx="299.30805"
-     inkscape:cy="898.63346"
+     inkscape:zoom="4"
+     inkscape:cx="239.02599"
+     inkscape:cy="984.06328"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -107,7 +107,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -865,5 +865,16 @@
          x="17.669336"
          y="20.146374"
          style="fill:#ffffff;fill-opacity:1;stroke-width:0.26458332">9205*  autooff</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:5.29166651px;line-height:1.25;font-family:'DejaVu Sans';-inkscape-font-specification:'DejaVu Sans Bold';letter-spacing:0px;word-spacing:0px;fill:#00ff00;fill-opacity:1;stroke:none;stroke-width:0.13229166"
+       x="69.917183"
+       y="103.7012"
+       id="text7527-3"><tspan
+         sodipodi:role="line"
+         id="tspan7525-6"
+         x="69.917183"
+         y="103.7012"
+         style="font-size:5.29166651px;fill:#00ff00;fill-opacity:1;stroke-width:0.13229166">F</tspan></text>
   </g>
 </svg>
