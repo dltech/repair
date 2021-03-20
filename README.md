@@ -1,2 +1,2 @@
 # repair
-documentation fo repairing
+* DT9205 DMM schematic and label stickers
