@@ -1,0 +1,223 @@
+EESchema Schematic File Version 4
+EELAYER 30 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+Wire Wire Line
+	5950 3150 5950 3800
+Wire Wire Line
+	4600 3600 6050 3600
+Wire Wire Line
+	6050 3600 6050 2950
+Wire Wire Line
+	4600 2700 4900 2700
+Wire Wire Line
+	4900 3150 4900 3200
+Wire Wire Line
+	4650 3150 4900 3150
+Wire Wire Line
+	4650 2800 4650 3150
+Wire Wire Line
+	4600 2800 4650 2800
+Wire Wire Line
+	4700 2800 4900 2800
+Wire Wire Line
+	4700 2900 4700 2800
+Wire Wire Line
+	4600 2900 4700 2900
+Wire Wire Line
+	4900 3250 4900 3300
+Wire Wire Line
+	4700 3250 4900 3250
+Wire Wire Line
+	4700 3000 4700 3250
+Wire Wire Line
+	4600 3000 4700 3000
+Wire Wire Line
+	4750 2900 4900 2900
+Wire Wire Line
+	4750 3100 4750 2900
+Wire Wire Line
+	4600 3100 4750 3100
+Wire Wire Line
+	4650 3350 4850 3350
+Wire Wire Line
+	4850 3350 4850 3100
+Wire Wire Line
+	4650 3400 4650 3350
+Wire Wire Line
+	4600 3400 4650 3400
+Wire Wire Line
+	4750 3400 4900 3400
+Wire Wire Line
+	4750 3200 4750 3400
+Wire Wire Line
+	4600 3200 4750 3200
+Wire Wire Line
+	4800 3000 4900 3000
+Wire Wire Line
+	4800 3300 4800 3000
+Wire Wire Line
+	4600 3300 4800 3300
+Wire Wire Line
+	4850 3100 4900 3100
+Wire Wire Line
+	5900 3150 5950 3150
+Wire Wire Line
+	4600 3800 5950 3800
+Wire Wire Line
+	6000 3050 6000 3700
+Wire Wire Line
+	6050 2950 5900 2950
+Wire Wire Line
+	4600 3700 6000 3700
+Wire Wire Line
+	6000 3050 5900 3050
+NoConn ~ 3800 3400
+NoConn ~ 3800 3300
+NoConn ~ 4600 3900
+$Comp
+L power:+3.3V #PWR01
+U 1 1 5F8299A0
+P 3750 3950
+F 0 "#PWR01" H 3750 3800 50  0001 C CNN
+F 1 "+3.3V" H 3765 4123 50  0000 C CNN
+F 2 "" H 3750 3950 50  0001 C CNN
+F 3 "" H 3750 3950 50  0001 C CNN
+	1    3750 3950
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR02
+U 1 1 5F82B8A0
+P 3750 4150
+F 0 "#PWR02" H 3750 3900 50  0001 C CNN
+F 1 "GND" H 3755 3977 50  0000 C CNN
+F 2 "" H 3750 4150 50  0001 C CNN
+F 3 "" H 3750 4150 50  0001 C CNN
+	1    3750 4150
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3800 4100 3750 4100
+Wire Wire Line
+	3750 4100 3750 4150
+Wire Wire Line
+	3800 4000 3750 4000
+Wire Wire Line
+	3750 4000 3750 3950
+NoConn ~ 4600 4000
+NoConn ~ 4600 4100
+Wire Wire Line
+	3350 2800 3800 2800
+Wire Wire Line
+	3350 2900 3800 2900
+Text Notes 2900 2900 0    50   ~ 0
+MCU
+$Comp
+L Connector:Conn_01x01 J3
+U 1 1 60FB9DA6
+P 3150 2800
+F 0 "J3" H 3300 2700 50  0000 C CNN
+F 1 "CLK" H 3150 2700 50  0000 C CNN
+F 2 "new:SolderWirePad_1x01_SMD_1x2mm" H 3150 2800 50  0001 C CNN
+F 3 "~" H 3150 2800 50  0001 C CNN
+	1    3150 2800
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:Conn_01x01 J4
+U 1 1 60FBA34F
+P 3150 2900
+F 0 "J4" H 3300 3000 50  0000 C CNN
+F 1 "DIO" H 3150 3000 50  0000 C CNN
+F 2 "new:SolderWirePad_1x01_SMD_1x2mm" H 3150 2900 50  0001 C CNN
+F 3 "~" H 3150 2900 50  0001 C CNN
+	1    3150 2900
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:Conn_01x01 J1
+U 1 1 60FBA8C5
+P 3150 3400
+F 0 "J1" H 3068 3175 50  0000 C CNN
+F 1 "VCC" H 3068 3266 50  0000 C CNN
+F 2 "new:SolderWirePad_1x01_SMD_1x2mm" H 3150 3400 50  0001 C CNN
+F 3 "~" H 3150 3400 50  0001 C CNN
+	1    3150 3400
+	-1   0    0    1   
+$EndComp
+$Comp
+L Connector:Conn_01x01 J2
+U 1 1 60FBADAD
+P 3150 3750
+F 0 "J2" H 3068 3525 50  0000 C CNN
+F 1 "GND" H 3068 3616 50  0000 C CNN
+F 2 "new:SolderWirePad_1x01_SMD_1x2mm" H 3150 3750 50  0001 C CNN
+F 3 "~" H 3150 3750 50  0001 C CNN
+	1    3150 3750
+	-1   0    0    1   
+$EndComp
+$Comp
+L power:+3.3V #PWR0101
+U 1 1 60FBB388
+P 3550 3300
+F 0 "#PWR0101" H 3550 3150 50  0001 C CNN
+F 1 "+3.3V" H 3565 3473 50  0000 C CNN
+F 2 "" H 3550 3300 50  0001 C CNN
+F 3 "" H 3550 3300 50  0001 C CNN
+	1    3550 3300
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR0102
+U 1 1 60FBB62B
+P 3550 3800
+F 0 "#PWR0102" H 3550 3550 50  0001 C CNN
+F 1 "GND" H 3555 3627 50  0000 C CNN
+F 2 "" H 3550 3800 50  0001 C CNN
+F 3 "" H 3550 3800 50  0001 C CNN
+	1    3550 3800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3350 3750 3550 3750
+Wire Wire Line
+	3550 3750 3550 3800
+Wire Wire Line
+	3350 3400 3550 3400
+Wire Wire Line
+	3550 3400 3550 3300
+$Comp
+L local:TM1637 U?
+U 1 1 60F48864
+P 4200 3500
+F 0 "U?" H 4200 4525 50  0000 C CNN
+F 1 "TM1637" H 4200 4434 50  0000 C CNN
+F 2 "" H 4200 3650 50  0001 C CNN
+F 3 "" H 4200 3650 50  0001 C CNN
+	1    4200 3500
+	1    0    0    -1  
+$EndComp
+$Comp
+L local:LED_3digit D?
+U 1 1 60F4942E
+P 5400 3050
+F 0 "D?" H 5400 3647 60  0000 C CNN
+F 1 "LED_3digit" H 5400 3541 60  0000 C CNN
+F 2 "" H 5400 3050 60  0001 C CNN
+F 3 "" H 5400 3050 60  0001 C CNN
+	1    5400 3050
+	1    0    0    -1  
+$EndComp
+$EndSCHEMATC

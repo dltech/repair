@@ -4,12 +4,12 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
-Title ""
-Date ""
+Title "0.9-9V DC-DC with sleep function"
+Date "2021-03-21"
 Rev ""
 Comp ""
 Comment1 ""
-Comment2 ""
+Comment2 "Mikhail Belkin"
 Comment3 ""
 Comment4 ""
 $EndDescr
