@@ -25,6 +25,7 @@
 
 // A little of global variables, in order to keep data between interrupt calls
 volatile uint32_t irFrame[SEQUENCE_LEN];
+uint8_t irFramee[SEQUENCE_LEN];
 volatile remotePropStruct remoteProp;
 extern volatile usbPropStruct usbProp;
 
@@ -71,7 +72,7 @@ void periodicPortPollDmaInit()
     DMA1_CMAR2  = (uint32_t) irFrame;
     DMA1_CNDTR2 = (uint32_t) SEQUENCE_LEN;
     DMA1_CCR2   = MINC | MSIZE_32BIT | PSIZE_32BIT | PL_LOW | CIRC | TCIE;
-    NVIC_EnableIRQ(DMA1_Channel2_IRQn);
+//    NVIC_EnableIRQ(DMA1_Channel2_IRQn);
 }
 
 // setting up timer interrupt for sending a report
@@ -80,7 +81,7 @@ void sendReportIrqInit()
     RCC_APB1ENR |= TIM3EN;
     TIM3_CR1   = (uint32_t) CKD_CK_INT;
     TIM3_PSC   = (uint32_t) POLL_PSC;// MAXIMAL_PSC;
-    TIM3_ARR   = (uint32_t) SEQUENCE_LEN; // DECODE_RATE_ARR;
+    TIM3_ARR   = (uint32_t) 1;//SEQUENCE_LEN; // DECODE_RATE_ARR;
     TIM3_DIER  = (uint32_t) UIE;
     TIM3_CR1  |= (uint32_t) CEN;
 //    nvic_set_priority(NVIC_TIM2_IRQ, 0x00);
@@ -88,7 +89,7 @@ void sendReportIrqInit()
     TIM2_EGR  |= (uint32_t) UG;
     TIM3_EGR  |= (uint32_t) UG;
     DMA1_CCR2 |= DMA_EN;
-//    NVIC_EnableIRQ(TIM3_IRQn);
+    NVIC_EnableIRQ(TIM3_IRQn);
 }
 
 // initialisation of a IR remote (it's address and it's button codes)
@@ -116,13 +117,13 @@ void irInit()
 void DMA1_Channel2_Handler()
 {
     DMA1_IFCR = 0xffff;
-    if(usbProp.deviceState != CONFIGURED) return;
-    uint8_t output[SEQUENCE_LEN];
-    for(int i=0 ; i<SEQUENCE_LEN ; ++i) {
-        output[i] = (uint8_t)irFrame[i] & IR_PIN;
-        irFrame[i] = 0;
-    }
-    vcpTx(output,SEQUENCE_LEN);
+    // if(usbProp.deviceState != CONFIGURED) return;
+    // uint8_t output[SEQUENCE_LEN];
+    // for(int i=0 ; i<SEQUENCE_LEN ; ++i) {
+    //     output[i] = (uint8_t)irFrame[i] & IR_PIN;
+    //     irFrame[i] = 0;
+    // }
+    // vcpTx(output,SEQUENCE_LEN);
 }
 
 
@@ -155,8 +156,13 @@ void TIM3_Handler()
     //     }
     // }
     TIM3_SR = 0;
-
-
+    if(usbProp.deviceState != CONFIGURED)   return;
+    static int i;
+    irFramee[i++] = (uint8_t)IR_PORT;
+    if(i >= SEQUENCE_LEN) {
+        i=0;
+        vcpTx(irFramee,SEQUENCE_LEN);
+    }
 }
 
 //void wkupByPress()

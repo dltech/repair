@@ -23,13 +23,13 @@
 #include "../lib/STM32F103_CMSIS/stm32f103.h"
 
 // port poll frequency in us
-#define POLL_RATE        1000//200
+#define POLL_RATE        200//200
 // port read frame in ms
 #define SEQUENCE_TIME   100
 // symbol decode rate in ms
 #define READ_RATE       25
 // calculating for fre prog
-#define POLL_PSC        65534//((SYSTEM_CLOCK / 1000000) * POLL_RATE) - 1
+#define POLL_PSC        ((SYSTEM_CLOCK / 1000000) * (POLL_RATE/2)) - 1
 #define SEQUENCE_LEN    63
 //#define SEQUENCE_LEN    SEQUENCE_TIME * 1000 / POLL_RATE
 #define MAXIMAL_PSC     65534

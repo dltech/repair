@@ -230,14 +230,14 @@ void usbSusp()
     // USB low power mode and slow clock
     USB_CNTR |= LP_MODE;
     USB_CNTR |= RESETM;
-    suspSysClk();
+//    suspSysClk();
 }
 
 void usbWkup()
 {
     if(usbProp.isSusp == 0) return;
     usbProp.isSusp = 0;
-    sysClk();
+//    sysClk();
     USB_CNTR &= ~((uint32_t)(LP_MODE | FSUSP));
     USB_ISTR = 0;
     defaultDtogInit(1);

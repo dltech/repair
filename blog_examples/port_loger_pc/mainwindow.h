@@ -9,6 +9,7 @@
 #include <QPushButton>
 #include <QToolBar>
 #include <QStatusBar>
+#include <QValueAxis>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -42,11 +43,15 @@ private:
     QLineSeries* series;
     QChart *chart;
     QChartView *chartView;
+    QValueAxis *axisX;
+    QValueAxis *axisY;
     // костыль
     QTimer *timer;
     // buffer
-    static constexpr int rxSize = 300000;
-    static constexpr int scrSize = 100;
+    static constexpr int rxSize = 20000;
+    static constexpr int scrSize = 200;
+    static constexpr float period = 0.0002;
+    int received;
     char rxBuf[rxSize];
     int lr = 0;
     bool isPause = false;

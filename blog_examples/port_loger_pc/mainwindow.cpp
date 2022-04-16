@@ -12,16 +12,27 @@ MainWindow::MainWindow(QWidget *parent)
     series = new QLineSeries(this);
     chart = new QChart();
     chartView = new QChartView(chart);
-
+    axisX = new QValueAxis(this);
+    axisY = new QValueAxis(this);
     // qraphics settings
     series->setName("spline");
     chart->legend()->hide();
     chart->addSeries(series);
     chart->setTitle("One port loger");
-    chart->createDefaultAxes();
-    chart->axes(Qt::Vertical).first()->setRange(0, 1);
-    chart->axes(Qt::Horizontal).first()->setRange(0, scrSize);
+    axisX->setMin(0);
+    axisX->setMax((float)scrSize*period);
+    axisX->setTickCount(scrSize/10+1);
+    axisX->setTickInterval(period*10);
+    axisX->setMinorTickCount(9);
+    axisY->setMin(0);
+    axisY->setMax(1);
+    axisY->setTickCount(2);
+    chart->addAxis(axisX,Qt::AlignBottom);
+    chart->addAxis(axisX,Qt::AlignLeft);
+    series->attachAxis(axisX);
+    series->attachAxis(axisY);
     chartView->setRenderHint(QPainter::Antialiasing);
+
 
     // interface
     toolBar = new QToolBar(this);
@@ -45,7 +56,14 @@ MainWindow::MainWindow(QWidget *parent)
     resize(1600, 200);
 
     // port settings
-    rxPort->setPortName("ttyACM1");
+    QList<QSerialPortInfo> list;
+    list = QSerialPortInfo::availablePorts();
+    for( int i=0 ; i<list.length() ; ++i) {
+        qDebug() << list[i].portName();
+        if( list[i].portName().contains("ACM") ) {
+            rxPort->setPortName(list[i].portName());
+        }
+    }
     rxPort->setBaudRate(9600,QSerialPort::Input);
     rxPort->open(QIODevice::ReadOnly);
 
@@ -54,12 +72,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(timer, SIGNAL(timeout()), this, SLOT(upgrade()));
     timer->start(1000);
 
-    QList<QSerialPortInfo> list;
-    list = QSerialPortInfo::availablePorts();
-    for( int i=0 ; i<list.length() ; ++i) {
-        qDebug() << list[i].portName();
-    }
-    list.data();
+
 }
 
 void MainWindow::upgrade()
@@ -69,10 +82,11 @@ void MainWindow::upgrade()
     int obtained = rxPort->bytesAvailable();
     qDebug() << obtained;
     for(int i=0 ; i<rxSize ; ++i) rxBuf[i] = 0;
+    received = rxPort->bytesAvailable();
     rxPort->read(rxBuf,rxSize);
     rxPort->clear(QSerialPort::AllDirections);
     for(int i=0 ; (i<obtained) && (i<scrSize) ; ++i) {
-        series->append(i,rxBuf[i]);
+        series->append((float)i*period,rxBuf[i]);
     }
     QString str = QString("%1 : %2").arg(0).arg(scrSize);
     stBar->showMessage(str);
@@ -84,7 +98,7 @@ void MainWindow::prevF()
     if(lr < 0) lr=0;
     series->clear();
     for(int i=0 ; i<scrSize ; ++i) {
-        series->append(i,rxBuf[i+(lr*scrSize)]);
+        series->append((float)i*period,rxBuf[i+(lr*scrSize)]);
     }
     QString str = QString("paused %1 : %2").arg(lr*scrSize).arg((lr+1)*scrSize);
     stBar->showMessage(str);
@@ -94,10 +108,10 @@ void MainWindow::nextF()
 {
 
     ++lr;
-    if(lr >= rxSize/scrSize) lr=rxSize/scrSize -1;
+    if(lr >= received/scrSize) lr=received/scrSize -1;
     series->clear();
     for(int i=0 ; i<scrSize ; ++i) {
-        series->append(i,rxBuf[i+(lr*scrSize)]);
+        series->append((float)i*period,rxBuf[i+(lr*scrSize)]);
     }
     QString str = QString("paused %1 : %2").arg(lr*scrSize).arg((lr+1)*scrSize);
     stBar->showMessage(str);
