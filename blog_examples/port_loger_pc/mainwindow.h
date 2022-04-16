@@ -10,6 +10,9 @@
 #include <QToolBar>
 #include <QStatusBar>
 #include <QValueAxis>
+#include <QBoxLayout>
+#include <QTextEdit>
+#include <QWidget>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -24,11 +27,9 @@ public slots:
     void prevF(void);
     void nextF(void);
     void pauseF(void);
-
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-
 private:
     Ui::MainWindow *ui;
     // buttons
@@ -36,7 +37,10 @@ private:
     QPushButton *prev;
     QPushButton *next;
     QPushButton *pause;
+    QBoxLayout *lay;
+    QTextEdit *cmds;
     QStatusBar *stBar;
+    QWidget *nestedW;
     // port
     QSerialPort *rxPort;
     // chart
@@ -55,5 +59,7 @@ private:
     char rxBuf[rxSize];
     int lr = 0;
     bool isPause = false;
+
+    void necRecognizer(void);
 };
 #endif // MAINWINDOW_H
