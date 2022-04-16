@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 7.0.0, 2022-04-16T23:50:19. -->
+<!-- Written by QtCreator 7.0.0, 2022-04-17T02:11:03. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -245,6 +245,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/home/dltech/src/repair/blog_examples/build-port_loger_pc-Desktop_Qt_6_3_0_GCC_64bit-Debug</value>
    </valuemap>
    <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>

@@ -59,7 +59,7 @@ private:
     char rxBuf[rxSize];
     int lr = 0;
     bool isPause = false;
-
+    void samsungRecognizer(void);
     void necRecognizer(void);
 };
 #endif // MAINWINDOW_H

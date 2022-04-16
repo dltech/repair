@@ -95,6 +95,7 @@ void MainWindow::upgrade()
     stBar->showMessage(str);
     qDebug() << received;
     necRecognizer();
+    samsungRecognizer();
 }
 
 void MainWindow::prevF()
@@ -147,6 +148,7 @@ void MainWindow::necRecognizer()
             bitCnt = 0;
             addr = 0;
             command = 0;
+            word = 0;
         }
         // detect one
         if((prev == 1) && (rxBuf[i] == 0) && (isStart == true) && (oneCnt > 7) && (oneCnt < 11)) {
@@ -162,17 +164,73 @@ void MainWindow::necRecognizer()
                              ((word >> 16 & 0xff) == (~(word >> 24) & 0xff))) {
             addr = (uint8_t)word;
             command = (uint8_t)(word >> 16);
-            QString str = QString("addr %1 cmd %2").arg(addr).arg(command);
+            QString str = QString("NEC addr %1 cmd %2").arg(addr,1,16).arg(command,1,16);
             qDebug() << str;
             cmds->append(str);
             isStart = false;
             bitCnt = 0;
+            word = 0;
         }
         // null counters in case of error
         if(bitCnt >= 32) {
             qDebug() << "comm" << word;
             bitCnt = 0;
             isStart = false;
+            word = 0;
+        }
+        // edge detector
+        if(rxBuf[i] == 1) ++oneCnt;
+        else oneCnt = 0;
+        if(rxBuf[i] == 0) ++nullCnt;
+        else nullCnt = 0;
+        prev = rxBuf[i];
+    }
+}
+
+void MainWindow::samsungRecognizer()
+{
+    int bitCnt = 0;
+    uint8_t prev = 1;
+    bool isStart = false;
+    int oneCnt = 0;
+    int nullCnt = 0;
+    uint16_t addr;
+    uint16_t command;
+    uint32_t word = 0;
+    for(int i=0 ; (i<received) && (i<rxSize) ; ++i) {
+        // detect start bit
+        if((prev == 0) && (rxBuf[i] == 1) && (nullCnt > 18)) {
+            isStart = true;
+            bitCnt = 0;
+            addr = 0;
+            command = 0;
+            word = 0;
+        }
+        // detect one
+        if((prev == 1) && (rxBuf[i] == 0) && (isStart == true) && (oneCnt > 7) && (oneCnt < 11)) {
+            word += 1<<bitCnt;
+            ++bitCnt;
+        }
+        // detect null
+        if((prev == 1) && (rxBuf[i] == 0) && (isStart == true) && (oneCnt < 7)) {
+            ++bitCnt;
+        }
+        // decode command
+        if( (bitCnt >= 32) && (isStart == true) ) {
+            addr = (uint16_t)word;
+            command = (uint16_t)(word >> 16);
+            QString str = QString("samsung addr %1 cmd %2").arg(addr,1,16).arg(command,1,16);
+            qDebug() << str;
+            cmds->append(str);
+            bitCnt = 0;
+            isStart = false;
+            qDebug() << "comm" << word;
+            word = 0;
+        }
+        if((bitCnt >= 32) || (oneCnt > 30)) {
+            bitCnt = 0;
+            isStart = false;
+            word = 0;
         }
         // edge detector
         if(rxBuf[i] == 1) ++oneCnt;
