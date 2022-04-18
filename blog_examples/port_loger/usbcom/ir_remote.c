@@ -17,25 +17,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "../lib/regs/dma_regs.h"
 #include "../lib/regs/tim_regs.h"
 #include "../lib/regs/rcc_regs.h"
 #include "usb_core.h"
 #include "ir_remote.h"
 
 // A little of global variables, in order to keep data between interrupt calls
-volatile uint32_t irFrame[SEQUENCE_LEN];
 uint8_t irFramee[SEQUENCE_LEN];
 volatile remotePropStruct remoteProp;
 extern volatile usbPropStruct usbProp;
 
-
 void gpioInit(void);
 void sendReportIrqInit(void);
 
-
-// wakeup from suspend mode by pressed button (not used)
-//void wkupByPress(void);
 
 void gpioInit()
 {
