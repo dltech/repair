@@ -8,7 +8,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    rxPort = new QSerialPort(this);
     series = new QLineSeries(this);
     chart = new QChart();
     chartView = new QChartView(chart);
@@ -39,18 +38,22 @@ MainWindow::MainWindow(QWidget *parent)
     prev = new QPushButton(this);
     next = new QPushButton(this);
     pause = new QPushButton(this);
+    clr = new QPushButton(this);
     nestedW = new QWidget(this);
     lay = new QBoxLayout(QBoxLayout::TopToBottom,nestedW);
     cmds = new QTextEdit(this);
     connect(next, SIGNAL(released()), this, SLOT(nextF()));
     connect(prev, SIGNAL(released()), this, SLOT(prevF()));
     connect(pause, SIGNAL(released()), this, SLOT(pauseF()));
+    connect(clr, SIGNAL(released()), this, SLOT(clrF()));
     prev->setText("prev");
     next->setText("next");
     pause->setText("pause");
+    clr->setText("clrLst");
     toolBar->addWidget(prev);
     toolBar->addWidget(next);
     toolBar->addWidget(pause);
+    toolBar->addWidget(clr);
     stBar = new QStatusBar(this);
     stBar->showMessage("0:1000");
     cmds->setReadOnly(true);
@@ -61,8 +64,8 @@ MainWindow::MainWindow(QWidget *parent)
     setStatusBar(stBar);
     resize(1600, 300);
 
-
     // port settings
+    rxPort = new QSerialPort(this);
     QList<QSerialPortInfo> list;
     list = QSerialPortInfo::availablePorts();
     for( int i=0 ; i<list.length() ; ++i) {
@@ -131,6 +134,12 @@ void MainWindow::pauseF()
     }
 }
 
+void MainWindow::clrF()
+{
+    commandCntr = 0;
+    cmds->clear();
+}
+
 void MainWindow::necRecognizer()
 {
     int bitCnt = 0;
@@ -146,8 +155,6 @@ void MainWindow::necRecognizer()
         if((prev == 0) && (rxBuf[i] == 1) && (nullCnt > 20)) {
             isStart = true;
             bitCnt = 0;
-            addr = 0;
-            command = 0;
             word = 0;
         }
         // detect one
@@ -164,16 +171,15 @@ void MainWindow::necRecognizer()
                              ((word >> 16 & 0xff) == (~(word >> 24) & 0xff))) {
             addr = (uint8_t)word;
             command = (uint8_t)(word >> 16);
-            QString str = QString("NEC addr %1 cmd %2").arg(addr,1,16).arg(command,1,16);
-            qDebug() << str;
+            QString str = QString("%1: NEC addr %2 cmd %3").arg(commandCntr).arg(addr,1,16).arg(command,1,16);
             cmds->append(str);
             isStart = false;
             bitCnt = 0;
             word = 0;
+            ++commandCntr;
         }
         // null counters in case of error
         if(bitCnt >= 32) {
-            qDebug() << "comm" << word;
             bitCnt = 0;
             isStart = false;
             word = 0;
@@ -189,22 +195,20 @@ void MainWindow::necRecognizer()
 
 void MainWindow::samsungRecognizer()
 {
-    int bitCnt = 0;
     uint8_t prev = 1;
     bool isStart = false;
     int oneCnt = 0;
     int nullCnt = 0;
+    int bitCnt = 0;
+    uint32_t word = 0;
     uint16_t addr;
     uint16_t command;
-    uint32_t word = 0;
     for(int i=0 ; (i<received) && (i<rxSize) ; ++i) {
         // detect start bit
-        if((prev == 0) && (rxBuf[i] == 1) && (nullCnt > 18)) {
+        if((prev == 0) && (rxBuf[i] == 1) && (nullCnt > 20) && (nullCnt < 25)) {
             isStart = true;
-            bitCnt = 0;
-            addr = 0;
-            command = 0;
             word = 0;
+            bitCnt = 0;
         }
         // detect one
         if((prev == 1) && (rxBuf[i] == 0) && (isStart == true) && (oneCnt > 7) && (oneCnt < 11)) {
@@ -219,13 +223,12 @@ void MainWindow::samsungRecognizer()
         if( (bitCnt >= 32) && (isStart == true) ) {
             addr = (uint16_t)word;
             command = (uint16_t)(word >> 16);
-            QString str = QString("samsung addr %1 cmd %2").arg(addr,1,16).arg(command,1,16);
-            qDebug() << str;
+            QString str = QString("%1: samsung addr %2 cmd %3").arg(commandCntr).arg(addr,1,16).arg(command,1,16);
             cmds->append(str);
             bitCnt = 0;
             isStart = false;
-            qDebug() << "comm" << word;
             word = 0;
+            ++commandCntr;
         }
         if((bitCnt >= 32) || (oneCnt > 30)) {
             bitCnt = 0;
@@ -246,4 +249,3 @@ MainWindow::~MainWindow()
     delete ui;
     delete chart;
 }
-

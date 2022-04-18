@@ -31,10 +31,7 @@ extern volatile usbPropStruct usbProp;
 
 
 void gpioInit(void);
-void periodicPortPollTimerInit(void);
-void periodicPortPollDmaInit(void);
 void sendReportIrqInit(void);
-void remotePropInit(void);
 
 
 // wakeup from suspend mode by pressed button (not used)
@@ -46,33 +43,6 @@ void gpioInit()
     RCC_APB2ENR |= IOPAEN;
     GPIOA_CRL = CNF_FLOATING(IR_PIN_INIT);
     GPIOA_ODR = 0;//IR_PIN;
-}
-
-
-// setting up timer of IR receiver periodical reading
-void periodicPortPollTimerInit()
-{
-    RCC_APB1ENR |= TIM2EN;
-    TIM2_CR1   = (uint32_t) CKD_CK_INT;
-    TIM2_PSC   = (uint32_t) POLL_PSC;
-    TIM2_ARR   = (uint32_t) 1;
-    TIM2_DIER  = (uint32_t) UDE;
-    TIM2_CR1  |= (uint32_t) CEN;
-//    NVIC_EnableIRQ(TIM2_IRQn);
-//    nvic_set_priority(NVIC_TIM2_IRQ, 0x00);
-    TIM2_SR    = 0;
-    TIM2_EGR  |= (uint32_t) UG;
-}
-
-// dma circular read of port with cyclical save in array
-void periodicPortPollDmaInit()
-{
-    RCC_AHBENR |= DMA1EN;
-    DMA1_CPAR2  = (uint32_t) &IR_PORT;
-    DMA1_CMAR2  = (uint32_t) irFrame;
-    DMA1_CNDTR2 = (uint32_t) SEQUENCE_LEN;
-    DMA1_CCR2   = MINC | MSIZE_32BIT | PSIZE_32BIT | PL_LOW | CIRC | TCIE;
-//    NVIC_EnableIRQ(DMA1_Channel2_IRQn);
 }
 
 // setting up timer interrupt for sending a report
@@ -92,69 +62,15 @@ void sendReportIrqInit()
     NVIC_EnableIRQ(TIM3_IRQn);
 }
 
-// initialisation of a IR remote (it's address and it's button codes)
-void remotePropInit()
-{
-    remoteProp.address = 0;
-    remoteProp.codeTable[100] = 0x5d;
-    remoteProp.codeTable[200] = 0x57;
-    remoteProp.isKeyPressed = 0;
-}
-
-uint32_t readrate = 0;
 // main init
 void irInit()
 {
     gpioInit();
-    periodicPortPollTimerInit();
-    periodicPortPollDmaInit();
     sendReportIrqInit();
-//    remotePropInit();
-//    readrate = TIM2_PSC;
 }
-
-
-void DMA1_Channel2_Handler()
-{
-    DMA1_IFCR = 0xffff;
-    // if(usbProp.deviceState != CONFIGURED) return;
-    // uint8_t output[SEQUENCE_LEN];
-    // for(int i=0 ; i<SEQUENCE_LEN ; ++i) {
-    //     output[i] = (uint8_t)irFrame[i] & IR_PIN;
-    //     irFrame[i] = 0;
-    // }
-    // vcpTx(output,SEQUENCE_LEN);
-}
-
 
 void TIM3_Handler()
 {
-    // ++readCnt;
-    // uint8_t report[KBD_REPORT_SIZE] = {0};
-    // static int repCnt = 0;
-    // static int sendCnt = 0;
-    // ++repCnt;
-    // if( remoteProp.isKeyPressed == 1 ) {
-    //     sendKbdReport(report);
-    //     remoteProp.isKeyPressed = 0;
-    // }
-    // if( (remoteProp.isKeyPressed == 0) && (repCnt>10) && (sendCnt < 10)) {
-    //     sendCnt++;
-    //     report[KBD_SYMBOL_POINTER] = 0x04;
-    //     sendKbdReport(report);
-    //     remoteProp.isKeyPressed = 1;
-    //     repCnt = 0;
-    // }
-    // int nulls = 0;
-    // for(int i=0 ; i<SEQUENCE_LEN ; ++i) {
-    //     if(irFrame[i] == 0) ++nulls;
-    //     if(nulls > 10) break;
-    // }
-    // if(nulls > 10) {
-    //     for(int i=0 ; i<SEQUENCE_LEN ; ++i) {
-    //         frameDump[i] = (uint8_t)(irFrame[i] & IR_PIN);
-    //     }
-    // }
     TIM3_SR = 0;
     if(usbProp.deviceState != CONFIGURED)   return;
     static int i;
@@ -164,15 +80,3 @@ void TIM3_Handler()
         vcpTx(irFramee,SEQUENCE_LEN);
     }
 }
-
-//void wkupByPress()
-//{
-//    static uint8_t prevReport = 0;
-//    if( gamepadPar.isSusp == 0 ) {
-//        return;
-//    }
-//    if(gamepadPar.report != prevReport) {
-//        usbWakeup();
-//    }
-//    prevReport = gamepadPar.report;
-//}

@@ -27,6 +27,7 @@ public slots:
     void prevF(void);
     void nextF(void);
     void pauseF(void);
+    void clrF(void);
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
@@ -37,6 +38,7 @@ private:
     QPushButton *prev;
     QPushButton *next;
     QPushButton *pause;
+    QPushButton *clr;
     QBoxLayout *lay;
     QTextEdit *cmds;
     QStatusBar *stBar;
@@ -58,6 +60,7 @@ private:
     int received;
     char rxBuf[rxSize];
     int lr = 0;
+    int commandCntr = 0;
     bool isPause = false;
     void samsungRecognizer(void);
     void necRecognizer(void);
