@@ -50,9 +50,7 @@ void sendReportIrqInit()
     TIM3_CR1  |= (uint32_t) CEN;
 //    nvic_set_priority(NVIC_TIM2_IRQ, 0x00);
     TIM3_SR    = 0;
-    TIM2_EGR  |= (uint32_t) UG;
     TIM3_EGR  |= (uint32_t) UG;
-    DMA1_CCR2 |= DMA_EN;
     NVIC_EnableIRQ(TIM3_IRQn);
 }
 
