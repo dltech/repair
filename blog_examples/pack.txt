@@ -1,5 +1,5 @@
 #default config
-sudo apt install curl calc cmus gcc-arm-none-eabi gdb-multiarch git gparted jstest-gtk kdenlive okular p7zip-full stlink-tools texlive-full vlc wine nomacs audacious dia inkscape usb-creator-gtk
+sudo apt install curl calc cmus gcc-arm-none-eabi gdb-multiarch git gparted jstest-gtk kdenlive okular p7zip-full stlink-tools texlive-full vlc wine nomacs audacious dia inkscape usb-creator-gtk snapd gnome-todo
 
 #repo install
 
