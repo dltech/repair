@@ -1,15 +1,16 @@
 #default config
-sudo apt install curl calc cmus gcc-arm-none-eabi gdb-multiarch git gparted jstest-gtk kdenlive okular p7zip-full stlink-tools texlive-full vlc wine nomacs audacious dia inkscape usb-creator-gtk snapd gnome-todo
+sudo apt install curl calc cmus gcc-arm-none-eabi gdb-multiarch git gparted jstest-gtk kdenlive okular p7zip-full stlink-tools texlive-full vlc wine nomacs audacious dia inkscape usb-creator-gtk snapd gnome-todo ghex unrar
 
 #repo install
 
-sudo add−apt−repository −−yes ppa:kicad/kicad−5.1−releases
+sudo add-apt-repository --yes ppa:kicad/kicad-6.0-releases
 
-curl -sL https://packagecloud.io/AtomEditor/atom/gpgkey | sudo apt-key add -
-sudo sh -c 'echo "deb [arch=amd64] https://packagecloud.io/AtomEditor/atom/any/ any main" > /etc/apt/sources.list.d/atom.list'
-
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys B05498B7
-sudo sh -c 'echo "deb http://repo.steampowered.com/steam/ precise steam" >> /etc/apt/sources.list.d/steam.list' 
+wget https://repo.steampowered.com/steam/archive/stable/steam.gpg
+sudo cp steam.gpg /etc/apt/trusted.gpg.d/steam.gpg
+sudo tee /etc/apt/sources.list.d/steam.list <<'EOF'
+deb [arch=amd64,i386] http://repo.steampowered.com/steam/ stable steam
+deb-src [arch=amd64,i386] http://repo.steampowered.com/steam/ stable steam
+EOF
 
 curl -sS https://download.spotify.com/debian/pubkey_5E3C45D7B312C643.gpg | sudo apt-key add - 
 echo "deb http://repository.spotify.com stable non-free" | sudo tee /etc/apt/sources.list.d/spotify.list
@@ -19,7 +20,7 @@ sudo apt install spotify-client atom  libgl1-mesa-dri:amd64 \
   libgl1-mesa-dri:i386 \
   libgl1-mesa-glx:amd64 \
   libgl1-mesa-glx:i386 \
-  steam-launcher
+  steam-launcher nvidia-driver-390
 sudo apt install --install-recommends kicad
 
-#google-chrome-stable download using firefox unfortunantely
+#google-chrome-stable download using firefox unfortunantely, atom using chrome
