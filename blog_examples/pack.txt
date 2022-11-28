@@ -24,3 +24,5 @@ sudo apt install spotify-client atom  libgl1-mesa-dri:amd64 \
 sudo apt install --install-recommends kicad
 
 #google-chrome-stable download using firefox unfortunantely, atom using chrome
+
+# GRUB_DISABLE_OS_PROBER=false in /etc/default/grub to find windows partition 
